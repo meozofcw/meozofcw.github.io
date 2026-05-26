@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Flor Inteligente</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:system-ui,sans-serif;
+  background:#f0f4f1;
+  color:#1a1a1a;
+  min-height:100vh;
+  padding:16px;
+}
+
+.dash{
+  max-width:680px;
+  margin:0 auto;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.title{
+  font-size:20px;
+  font-weight:600;
+  color:#1a1a1a;
+}
+
+.subtitle{
+  font-size:12px;
+  color:#888;
+  margin-top:2px;
+}
+
+.badge{
+  font-size:11px;
+  padding:3px 12px;
+  border-radius:99px;
+  font-weight:600;
+  border:1px solid;
+}
+
+.main-area{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-bottom:12px;
+}
+
+@media(max-width:500px){
+  .main-area{
+    grid-template-columns:1fr;
+  }
+}
+
+.card{
+  background:#fff;
+  border-radius:14px;
+  border:1px solid #e5e7eb;
+  padding:16px;
+}
+
+.flower-card{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+
+.metrics-col{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.metric{
+  background:#fff;
+  border-radius:12px;
+  border:1px solid #e5e7eb;
+  padding:12px 14px;
+}
+
+.mlabel{
+  font-size:10px;
+  color:#9ca3af;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  margin-bottom:3px;
+}
+
+.mval{
+  font-size:20px;
+  font-weight:700;
+  color:#111;
+}
+
+.munit{
+  font-size:11px;
+  color:#9ca3af;
+  margin-left:2px;
+}
+
+.barbg{
+  height:5px;
+  background:#f3f4f6;
+  border-radius:99px;
+  margin-top:7px;
+}
+
+.bar{
+  height:5px;
+  border-radius:99px;
+  transition:width 1s ease;
+}
+
+.mfoot{
+  font-size:10px;
+  margin-top:6px;
+  padding:2px 8px;
+  border-radius:99px;
+  display:inline-block;
+  font-weight:600;
+}
+
+.alertas{
+  margin-bottom:12px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.alerta{
+  font-size:12px;
+  padding:8px 12px;
+  border-radius:10px;
+  border:1px solid;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.chart-card{
+  background:#fff;
+  border-radius:14px;
+  border:1px solid #e5e7eb;
+  padding:16px;
+  margin-bottom:10px;
+}
+
+.chart-hdr{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.chart-title{
+  font-size:12px;
+  font-weight:600;
+  color:#6b7280;
+}
+
+.leg{
+  display:flex;
+  gap:10px;
+  font-size:10px;
+  color:#9ca3af;
+}
+
+.legdot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  display:inline-block;
+  margin-right:3px;
+  vertical-align:middle;
+}
+
+.offline{
+  background:#fef2f2;
+  border:1px solid #fca5a5;
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+  color:#991b1b;
+  font-size:13px;
+  margin-bottom:12px;
+  display:none;
+}
+
+.ts{
+  font-size:10px;
+  color:#9ca3af;
+  text-align:center;
+  margin-top:8px;
+}
+
+.config-card{
+  background:#fff;
+  border-radius:14px;
+  border:1px dashed #d1d5db;
+  padding:14px 16px;
+  margin-bottom:12px;
+  font-size:12px;
+  color:#6b7280;
+  line-height:1.7;
+}
+
+.config-card code{
+  background:#f3f4f6;
+  padding:1px 5px;
+  border-radius:4px;
+  font-size:11px;
+  color:#374151;
+}
+
+@keyframes sway{
+  0%,100%{transform:rotate(-2deg)}
+  50%{transform:rotate(2deg)}
+}
+
+@keyframes droop{
+  0%,100%{transform:rotate(0deg)}
+  50%{transform:rotate(-6deg)}
+}
+
+@keyframes wilt{
+  0%{transform:translateY(0)}
+  100%{transform:translateY(4px)}
+}
+
+@keyframes bloom{
+  0%{
+    transform:scale(0.7) rotate(-10deg);
+    opacity:.3
+  }
+  100%{
+    transform:scale(1) rotate(0deg);
+    opacity:1
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="dash">
+
+  <div class="header">
+    <div>
+      <div class="title">🌿 Flor Inteligente</div>
+      <div class="subtitle" id="ts-hdr">Conectando ao Firebase...</div>
+    </div>
+
+    <div id="badge" class="badge"
+      style="background:#f3f4f6;color:#6b7280;border-color:#d1d5db">
+      ...
+    </div>
+  </div>
+
+  <div class="config-card" id="config-box">
+    <strong style="color:#374151">Configure o Firebase:</strong>
+    substitua a URL abaixo pela do seu projeto.
+    <br><br>
+
+    <code>
+      https://SEU-PROJETO-default-rtdb.firebaseio.com
+    </code>
+  </div>
+
+  <div class="offline" id="offline-box">
+    Sem dados do ESP32.
+  </div>
+
+  <div id="alertas" class="alertas"></div>
+
+  <div class="main-area">
+
+    <div class="card flower-card">
+
+      <svg id="fsvg" width="150" height="180" viewBox="0 0 160 190">
+
+        <g id="raiz">
+          <path id="caule"
+            d="M80 170 Q72 140 80 110"
+            stroke="#3B6D11"
+            stroke-width="4"
+            fill="none"
+            stroke-linecap="round"/>
+
+          <path id="fe"
+            d="M80 145 Q55 130 50 110 Q70 120 80 140"
+            fill="#52b350"/>
+
+          <path id="fd"
+            d="M80 130 Q105 118 110 98 Q90 110 80 128"
+            fill="#52b350"/>
+        </g>
+
+        <g id="fg" style="transform-origin:80px 105px">
+          <g id="petalas"></g>
+          <circle id="centro" cx="80" cy="105" r="14" fill="#f9c74f"/>
+        </g>
+
+      </svg>
+
+      <div id="fstatus"
+        style="font-size:12px;color:#6b7280;text-align:center">
+      </div>
+
+      <div id="bomba-status"
+        style="font-size:11px;padding:3px 10px;border-radius:99px;font-weight:600;display:none">
+      </div>
+
+    </div>
+
+    <div class="metrics-col">
+
+      <div class="metric">
+        <div class="mlabel">Umidade do solo</div>
+        <div>
+          <span class="mval" id="vs">--</span>
+          <span class="munit">%</span>
+        </div>
+
+        <div class="barbg">
+          <div class="bar" id="bs"></div>
+        </div>
+
+        <div class="mfoot" id="fs">aguardando...</div>
+      </div>
+
+      <div class="metric">
+        <div class="mlabel">Qualidade do ar</div>
+        <div>
+          <span class="mval" id="vg">--</span>
+          <span class="munit">ADC</span>
+        </div>
+
+        <div class="barbg">
+          <div class="bar" id="bg2"></div>
+        </div>
+
+        <div class="mfoot" id="fg2">aguardando...</div>
+      </div>
+
+      <div class="metric">
+        <div class="mlabel">Luminosidade</div>
+        <div>
+          <span class="mval" id="vl">--</span>
+          <span class="munit">%</span>
+        </div>
+
+        <div class="barbg">
+          <div class="bar" id="bl"></div>
+        </div>
+
+        <div class="mfoot" id="fl">aguardando...</div>
+      </div>
+
+      <div class="metric">
+        <div class="mlabel">Temperatura</div>
+
+        <div>
+          <span class="mval" id="vt">--</span>
+          <span class="munit">°C</span>
+        </div>
+
+        <div class="barbg">
+          <div class="bar" id="bt"></div>
+        </div>
+
+        <div class="mfoot" id="ft">aguardando...</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="chart-card">
+
+    <div class="chart-hdr">
+
+      <span class="chart-title">
+        Histórico — últimas 20 leituras
+      </span>
+
+      <div class="leg">
+        <span><span class="legdot" style="background:#52b350"></span>Solo %</span>
+        <span><span class="legdot" style="background:#4cc9f0"></span>Luz %</span>
+        <span><span class="legdot" style="background:#f4845f"></span>Gás</span>
+        <span><span class="legdot" style="background:#ef4444"></span>Temp °C</span>
+      </div>
+
+    </div>
+
+    <div style="position:relative;width:100%;height:140px">
+      <canvas id="graf"></canvas>
+    </div>
+
+  </div>
+
+  <div class="ts" id="ts-bot">
+    Atualização em tempo real via Firebase
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+
+<script>
+
+const FIREBASE_URL = "https://SEU-PROJETO-default-rtdb.firebaseio.com";
+const FIREBASE_PATH = "/flor";
+
+const H = {
+  s:[],
+  g:[],
+  l:[],
+  t:[]
+};
+
+let ch = null;
+
+function push(s,g,l,t){
+
+  H.s.push(s);
+  H.g.push(g);
+  H.l.push(l);
+  H.t.push(t);
+
+  if(H.s.length > 20){
+    H.s.shift();
+    H.g.shift();
+    H.l.shift();
+    H.t.shift();
+  }
+}
+
+function estado(s,g,l,t){
+
+  if(s < 15 || t > 40)
+    return "critica";
+
+  if(s > 55 && g < 500 && l > 50 && t < 30)
+    return "otima";
+
+  if(s < 30 || g > 700 || l < 15 || t > 35)
+    return "ruim";
+
+  return "ok";
+}
+
+function renderFlor(s,g,l,t){
+
+  const est = estado(s,g,l,t);
+
+  const cfg = {
+    otima:{
+      cor:"#f9a8d4",
+      msg:"Saudável e florescendo!",
+      mc:"#14532d"
+    },
+
+    ok:{
+      cor:"#fca5a5",
+      msg:"Condições razoáveis",
+      mc:"#52713d"
+    },
+
+    ruim:{
+      cor:"#d97706",
+      msg:"Precisa de atenção!",
+      mc:"#b45309"
+    },
+
+    critica:{
+      cor:"#9ca3af",
+      msg:"Estado crítico!",
+      mc:"#dc2626"
+    }
+  };
+
+  const c = cfg[est];
+
+  const pg = document.getElementById("petalas");
+
+  pg.innerHTML = "";
+
+  for(let i=0;i<8;i++){
+
+    const a=(i/8)*Math.PI*2-Math.PI/2;
+
+    const px=80+Math.cos(a)*28;
+    const py=105+Math.sin(a)*28;
+
+    const el=document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "ellipse"
+    );
+
+    el.setAttribute("cx",px);
+    el.setAttribute("cy",py);
+    el.setAttribute("rx",20);
+    el.setAttribute("ry",11);
+    el.setAttribute("fill",c.cor);
+
+    pg.appendChild(el);
+  }
+
+  const fs=document.getElementById("fstatus");
+
+  fs.textContent=c.msg;
+  fs.style.color=c.mc;
+}
+
+function foot(id,txt,bg,c){
+
+  const el=document.getElementById(id);
+
+  el.textContent=txt;
+  el.style.background=bg;
+  el.style.color=c;
+}
+
+function renderMetricas(d){
+
+  const s=d.solo_porc;
+  const g=d.gas_raw;
+  const lRaw=d.ldr_raw;
+  const t=d.temperatura || 0;
+
+  const l=Math.min(100,Math.round(lRaw/40.95));
+  const gp=Math.min(100,Math.round(g/10.23));
+
+  document.getElementById("vs").textContent=Math.round(s);
+  document.getElementById("vg").textContent=Math.round(g);
+  document.getElementById("vl").textContent=Math.round(l);
+  document.getElementById("vt").textContent=t.toFixed(1);
+
+  const bs=document.getElementById("bs");
+
+  bs.style.width=s+"%";
+  bs.style.background=
+    s<30 ? "#f4845f" :
+    s<60 ? "#f9c74f" :
+    "#52b350";
+
+  const bg2=document.getElementById("bg2");
+
+  bg2.style.width=gp+"%";
+  bg2.style.background=
+    g>700 ? "#f4845f" :
+    g>500 ? "#f9c74f" :
+    "#52b350";
+
+  const bl=document.getElementById("bl");
+
+  bl.style.width=l+"%";
+  bl.style.background=
+    l<15 ? "#f4845f" :
+    l<40 ? "#f9c74f" :
+    "#4cc9f0";
+
+  const bt=document.getElementById("bt");
+
+  const tp=Math.min(100,Math.round((t/50)*100));
+
+  bt.style.width=tp+"%";
+
+  bt.style.background=
+    t>35 ? "#ef4444" :
+    t>28 ? "#f59e0b" :
+    "#22c55e";
+
+  foot(
+    "fs",
+    s<30 ? "Solo seco" :
+    "Umidade boa",
+
+    s<30 ? "#fee2e2" :
+    "#dcfce7",
+
+    s<30 ? "#991b1b" :
+    "#14532d"
+  );
+
+  foot(
+    "fg2",
+    g>700 ? "Ar ruim" :
+    "Ar limpo",
+
+    g>700 ? "#fee2e2" :
+    "#dcfce7",
+
+    g>700 ? "#991b1b" :
+    "#14532d"
+  );
+
+  foot(
+    "fl",
+    l<15 ? "Muito escuro" :
+    "Boa iluminação",
+
+    l<15 ? "#fee2e2" :
+    "#dcfce7",
+
+    l<15 ? "#991b1b" :
+    "#14532d"
+  );
+
+  foot(
+    "ft",
+    t>35 ? "Muito quente" :
+    t>28 ? "Temperatura moderada" :
+    "Temperatura ideal",
+
+    t>35 ? "#fee2e2" :
+    t>28 ? "#fef3c7" :
+    "#dcfce7",
+
+    t>35 ? "#991b1b" :
+    t>28 ? "#92400e" :
+    "#14532d"
+  );
+
+  const al=[];
+
+  if(s<30){
+    al.push({
+      t:"Solo seco",
+      bg:"#fef2f2",
+      bc:"#fca5a5",
+      c:"#991b1b"
+    });
+  }
+
+  if(g>700){
+    al.push({
+      t:"Qualidade do ar ruim",
+      bg:"#fff7ed",
+      bc:"#fdba74",
+      c:"#9a3412"
+    });
+  }
+
+  if(l<15){
+    al.push({
+      t:"Luminosidade muito baixa",
+      bg:"#fefce8",
+      bc:"#fde047",
+      c:"#713f12"
+    });
+  }
+
+  if(t>35){
+    al.push({
+      t:"Temperatura muito alta",
+      bg:"#fee2e2",
+      bc:"#fca5a5",
+      c:"#991b1b"
+    });
+  }
+
+  document.getElementById("alertas").innerHTML =
+    al.map(a => `
+      <div class="alerta"
+        style="background:${a.bg};
+        border-color:${a.bc};
+        color:${a.c}">
+        ▲ ${a.t}
+      </div>
+    `).join("");
+
+  const b=document.getElementById("badge");
+
+  b.textContent=estado(s,g,l,t).toUpperCase();
+}
+
+function renderGraf(){
+
+  const lb=H.s.map((_,i)=>i+1);
+
+  if(!ch){
+
+    ch=new Chart(document.getElementById("graf"),{
+
+      type:"line",
+
+      data:{
+        labels:lb,
+
+        datasets:[
+
+          {
+            label:"Solo %",
+            data:[...H.s],
+            borderColor:"#52b350",
+            tension:.35
+          },
+
+          {
+            label:"Luz %",
+            data:[...H.l],
+            borderColor:"#4cc9f0",
+            tension:.35
+          },
+
+          {
+            label:"Gás",
+            data:[...H.g],
+            borderColor:"#f4845f",
+            tension:.35
+          },
+
+          {
+            label:"Temp °C",
+            data:[...H.t],
+            borderColor:"#ef4444",
+            tension:.35
+          }
+        ]
+      },
+
+      options:{
+        responsive:true,
+        maintainAspectRatio:false
+      }
+    });
+
+  }else{
+
+    ch.data.labels=lb;
+
+    ch.data.datasets[0].data=[...H.s];
+    ch.data.datasets[1].data=[...H.l];
+    ch.data.datasets[2].data=[...H.g];
+    ch.data.datasets[3].data=[...H.t];
+
+    ch.update();
+  }
+}
+
+async function buscarDados(){
+
+  if(FIREBASE_URL.includes("SEU-PROJETO"))
+    return;
+
+  try{
+
+    const r = await fetch(
+      `${FIREBASE_URL}${FIREBASE_PATH}.json`
+    );
+
+    const d = await r.json();
+
+    const l = Math.min(
+      100,
+      Math.round(d.ldr_raw/40.95)
+    );
+
+    push(
+      Math.round(d.solo_porc),
+      d.gas_raw,
+      l,
+      d.temperatura || 0
+    );
+
+    renderFlor(
+      d.solo_porc,
+      d.gas_raw,
+      l,
+      d.temperatura || 0
+    );
+
+    renderMetricas(d);
+
+    renderGraf();
+
+    document.getElementById("config-box")
+      .style.display="none";
+
+    document.getElementById("offline-box")
+      .style.display="none";
+
+  }catch(e){
+
+    console.log(e);
+
+    document.getElementById("offline-box")
+      .style.display="block";
+  }
+}
+
+buscarDados();
+
+setInterval(buscarDados,5000);
+
+</script>
+
+</body>
+</html>
