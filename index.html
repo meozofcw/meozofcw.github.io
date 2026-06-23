@@ -2,443 +2,284 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LumiLeitura</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Portal do Aluno - Relatórios</title>
 
 <style>
-:root{
-    --azul:#A8D8EA;
-    --verde:#AAE3B0;
-    --amarelo:#FFF2B2;
-    --laranja:#FFD6A5;
-    --rosa:#FFCAD4;
-    --texto:#4A5568;
-    --branco:#FFFFFF;
-}
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 body{
-    font-family:'Quicksand',sans-serif;
-    background:#FDFDFD;
-    color:var(--texto);
+    background:#f5f5f5;
     overflow-x:hidden;
 }
 
-header{
-    background:linear-gradient(135deg,var(--azul),var(--rosa));
-    padding:20px 8%;
+.topbar{
+    height:80px;
+    background:#ffffff;
     display:flex;
+    align-items:center;
     justify-content:space-between;
-    align-items:center;
+    padding:0 15px;
 }
 
-.logo{
-    font-size:2rem;
-    font-weight:700;
+.logo-top{
+    color:#0f8ea6;
+    font-size:28px;
+    font-weight:bold;
 }
 
-nav a{
-    text-decoration:none;
-    color:var(--texto);
-    margin-left:25px;
-    font-weight:600;
+.user{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#6b6b6b;
 }
 
-.hero{
-    min-height:85vh;
+.header{
+    background:#5a005f;
+    height:85px;
     display:flex;
     align-items:center;
+    padding-left:20px;
+}
+
+.header img{
+    height:50px;
+}
+
+.container{
+    display:flex;
+}
+
+.sidebar{
+    width:90px;
+    background:#5a005f;
+    min-height:calc(100vh - 165px);
+}
+
+.menu-item{
+    height:90px;
+    border-bottom:1px solid rgba(255,255,255,.2);
+    display:flex;
     justify-content:center;
-    padding:40px 8%;
-    gap:50px;
-    flex-wrap:wrap;
+    align-items:center;
+    color:white;
+    font-size:34px;
 }
 
-.hero-text{
-    max-width:500px;
+.menu-item.active{
+    background:#008ea3;
 }
 
-.hero-text h1{
-    font-size:3.2rem;
-    margin-bottom:20px;
+.content{
+    flex:1;
+    padding:20px;
 }
 
-.hero-text p{
-    font-size:1.2rem;
-    line-height:1.8;
+.title{
+    font-size:56px;
+    color:#666;
+    font-weight:300;
     margin-bottom:25px;
 }
 
-.buttons{
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-}
-
-.btn{
-    border:none;
-    padding:15px 25px;
-    border-radius:18px;
-    cursor:pointer;
-    font-size:1rem;
-    font-weight:700;
-    transition:.3s;
-}
-
-.primary{
-    background:var(--verde);
-}
-
-.secondary{
-    background:var(--amarelo);
-}
-
-.btn:hover{
-    transform:translateY(-3px);
-}
-
-.mascote{
-    width:350px;
-    height:350px;
-    background:var(--azul);
-    border-radius:50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:8rem;
-}
-
-.section{
-    padding:80px 8%;
-}
-
-.section-title{
-    text-align:center;
-    margin-bottom:50px;
-    font-size:2.5rem;
-}
-
-.cards{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
+.select{
+    width:100%;
+    height:55px;
+    border:1px solid #d6d6d6;
+    background:white;
+    padding:0 15px;
+    font-size:22px;
+    color:#666;
+    margin-bottom:20px;
 }
 
 .card{
-    background:white;
-    padding:25px;
-    border-radius:25px;
-    box-shadow:0 8px 20px rgba(0,0,0,.05);
-    transition:.3s;
+    background:#fff;
+    border:1px solid #e2e2e2;
+    padding:20px;
+    margin-bottom:25px;
 }
 
-.card:hover{
-    transform:translateY(-5px);
-}
-
-.card h3{
-    margin-bottom:15px;
-}
-
-.leitura-demo{
-    background:var(--amarelo);
-    max-width:700px;
-    margin:auto;
-    padding:30px;
-    border-radius:25px;
-    text-align:center;
-}
-
-.texto-card{
-    background:white;
-    padding:25px;
-    border-radius:20px;
-    margin-bottom:20px;
-    line-height:1.8;
-}
-
-.next{
-    background:var(--verde);
-    border:none;
-    padding:12px 20px;
-    border-radius:12px;
-    cursor:pointer;
-}
-
-.categorias{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:20px;
-}
-
-.categoria{
-    text-align:center;
-    padding:30px;
-    border-radius:20px;
-    font-size:1.2rem;
+.card-title{
+    color:#008ea3;
+    font-size:22px;
+    line-height:1.4;
     font-weight:bold;
 }
 
-.cat1{background:var(--rosa);}
-.cat2{background:var(--azul);}
-.cat3{background:var(--verde);}
-.cat4{background:var(--laranja);}
-.cat5{background:var(--amarelo);}
-
-.dashboard{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
+.tipo{
+    margin-top:15px;
+    color:#777;
+    font-size:18px;
 }
 
-.stat{
-    background:white;
-    border-radius:25px;
-    padding:30px;
-    text-align:center;
-    box-shadow:0 8px 20px rgba(0,0,0,.05);
-}
-
-.numero{
-    font-size:2.5rem;
-    font-weight:bold;
-}
-
-footer{
-    text-align:center;
-    padding:40px;
-    background:var(--azul);
-}
-
-.accessibility{
-    position:fixed;
-    bottom:20px;
-    right:20px;
-    background:white;
-    padding:15px;
-    border-radius:20px;
-    box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-.accessibility button{
-    display:block;
+.btn{
     width:100%;
-    margin:5px 0;
     border:none;
-    padding:10px;
-    border-radius:10px;
+    background:#0097a7;
+    color:white;
+    font-size:22px;
+    padding:18px;
+    margin-top:20px;
+    border-radius:3px;
     cursor:pointer;
 }
 
-.dark{
-    background:#2D3748;
+.btn:hover{
+    background:#008899;
+}
+
+#pdfPage{
+    display:none;
+    height:100vh;
+    background:#fff;
+}
+
+.pdf-header{
+    height:70px;
+    background:#5a005f;
+    display:flex;
+    align-items:center;
+    padding:15px;
     color:white;
 }
 
-.dark .card,
-.dark .stat,
-.dark .texto-card{
-    background:#3B4658;
+.back-btn{
+    border:none;
+    background:#0097a7;
     color:white;
+    padding:10px 15px;
+    border-radius:4px;
+    margin-right:15px;
 }
 
-@media(max-width:768px){
-    .hero-text h1{
-        font-size:2.4rem;
-    }
-
-    .mascote{
-        width:250px;
-        height:250px;
-        font-size:6rem;
-    }
+iframe{
+    width:100%;
+    height:calc(100vh - 70px);
+    border:none;
 }
 </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">📚 LumiLeitura</div>
+<div id="homePage">
 
-    <nav>
-        <a href="#">Início</a>
-        <a href="#">Livros</a>
-        <a href="#">Conquistas</a>
-        <a href="#">Perfil</a>
-    </nav>
-</header>
-
-<section class="hero">
-
-    <div class="hero-text">
-        <h1>Descubra histórias no seu ritmo</h1>
-
-        <p>
-            Uma plataforma criada para jovens neurodivergentes,
-            com leitura adaptativa, audiolivros e baixa
-            sobrecarga sensorial.
-        </p>
-
-        <div class="buttons">
-            <button class="btn primary">Começar</button>
-            <button class="btn secondary">Ouvir História</button>
-        </div>
+    <div class="topbar">
+        <div class="logo-top">E...</div>
+        <div class="user"></div>
     </div>
 
-    <div class="mascote">
-        🦫
+    <div class="header">
+        <img src="assets/totvs.png" alt="TOTVS">
     </div>
 
-</section>
+    <div class="container">
 
-<section class="section">
-    <h2 class="section-title">Recursos</h2>
-
-    <div class="cards">
-
-        <div class="card">
-            <h3>🎯 Modo Foco</h3>
-            <p>Remove distrações e ajuda na concentração.</p>
+        <div class="sidebar">
+            <div class="menu-item">☰</div>
+            <div class="menu-item">🖥</div>
+            <div class="menu-item">📅</div>
+            <div class="menu-item">🕒</div>
+            <div class="menu-item">🎓</div>
+            <div class="menu-item">📋</div>
+            <div class="menu-item">💲</div>
+            <div class="menu-item">🤝</div>
+            <div class="menu-item active">📄</div>
         </div>
 
-        <div class="card">
-            <h3>🔊 Leitura Narrada</h3>
-            <p>Escute os livros com velocidade ajustável.</p>
-        </div>
+        <div class="content">
 
-        <div class="card">
-            <h3>📖 Blocos de Leitura</h3>
-            <p>Textos divididos em partes menores.</p>
-        </div>
+            <div class="title">Relatórios:</div>
 
-        <div class="card">
-            <h3>⭐ Conquistas</h3>
-            <p>Ganhe recompensas conforme avança.</p>
-        </div>
+            <select class="select">
+                <option>2026</option>
+            </select>
 
-    </div>
-</section>
+            <select class="select">
+                <option>TODOS</option>
+            </select>
 
-<section class="section">
+            <div class="card">
+                <div class="card-title">
+                    SESI_REL_0002 - Declaração de Matrícula - SESI
+                </div>
 
-    <h2 class="section-title">Experiência Adaptada</h2>
+                <button class="btn" disabled>
+                    Emitir relatório
+                </button>
 
-    <div class="leitura-demo">
+                <div class="tipo">
+                    Tipo de relatório: SECRETARIA
+                </div>
+            </div>
 
-        <div class="texto-card" id="texto">
-            Era uma vez uma menina que adorava aventuras e sonhava em conhecer lugares mágicos.
-        </div>
+            <div class="card">
 
-        <button class="next" onclick="proximoTrecho()">
-            Próximo Trecho
-        </button>
+                <div class="card-title">
+                    SESI_REL_0008 - Boletim Escolar Fundamental Menor,
+                    Maior e Ensino Médio EBEP
+                </div>
 
-    </div>
+                <button class="btn" onclick="abrirPDF()">
+                    Emitir relatório
+                </button>
 
-</section>
+                <div class="tipo">
+                    Tipo de relatório: SECRETARIA
+                </div>
 
-<section class="section">
+            </div>
 
-    <h2 class="section-title">Categorias</h2>
+            <div class="card">
+                <div class="card-title">
+                    SESI_REL_0016.1 - Declaração de Imposto de Renda
+                </div>
 
-    <div class="categorias">
+                <button class="btn" disabled>
+                    Emitir relatório
+                </button>
 
-        <div class="categoria cat1">🏰 Fantasia</div>
-        <div class="categoria cat2">🚀 Ficção Científica</div>
-        <div class="categoria cat3">🦖 Aventuras</div>
-        <div class="categoria cat4">🎨 HQs</div>
-        <div class="categoria cat5">🔬 Ciência</div>
+                <div class="tipo">
+                    Tipo de relatório: SECRETARIA
+                </div>
+            </div>
 
-    </div>
-
-</section>
-
-<section class="section">
-
-    <h2 class="section-title">Minha Jornada</h2>
-
-    <div class="dashboard">
-
-        <div class="stat">
-            <div class="numero">12</div>
-            <p>Livros Lidos</p>
-        </div>
-
-        <div class="stat">
-            <div class="numero">53</div>
-            <p>Estrelas</p>
-        </div>
-
-        <div class="stat">
-            <div class="numero">18h</div>
-            <p>Tempo de Leitura</p>
         </div>
 
     </div>
-
-</section>
-
-<div class="accessibility">
-
-    <button onclick="aumentarFonte()">
-        A+ Fonte
-    </button>
-
-    <button onclick="diminuirFonte()">
-        A- Fonte
-    </button>
-
-    <button onclick="modoEscuro()">
-        🌙 Modo Calmo
-    </button>
 
 </div>
 
-<footer>
-    LumiLeitura © 2026
-</footer>
+<div id="pdfPage">
+
+    <div class="pdf-header">
+        <button class="back-btn" onclick="voltar()">
+            ← Voltar
+        </button>
+
+        <h3>Boletim Escolar</h3>
+    </div>
+
+    <iframe src="assets/boletim.pdf"></iframe>
+
+</div>
 
 <script>
 
-let tamanho = 16;
-
-function aumentarFonte(){
-    tamanho += 2;
-    document.body.style.fontSize = tamanho + "px";
+function abrirPDF(){
+    document.getElementById("homePage").style.display = "none";
+    document.getElementById("pdfPage").style.display = "block";
 }
 
-function diminuirFonte(){
-    tamanho -= 2;
-    document.body.style.fontSize = tamanho + "px";
-}
-
-function modoEscuro(){
-    document.body.classList.toggle("dark");
-}
-
-const trechos = [
-"Era uma vez uma menina que adorava aventuras e sonhava em conhecer lugares mágicos.",
-"Em uma manhã ensolarada ela encontrou um mapa escondido dentro de um livro antigo.",
-"O mapa mostrava uma floresta onde os animais sabiam conversar.",
-"Com coragem ela decidiu seguir a trilha indicada e iniciou sua jornada."
-];
-
-let atual = 0;
-
-function proximoTrecho(){
-    atual++;
-    if(atual >= trechos.length){
-        atual = 0;
-    }
-
-    document.getElementById("texto").innerText = trechos[atual];
+function voltar(){
+    document.getElementById("pdfPage").style.display = "none";
+    document.getElementById("homePage").style.display = "block";
 }
 
 </script>
