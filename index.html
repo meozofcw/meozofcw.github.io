@@ -2,186 +2,228 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Portal do Aluno - Relatórios</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Portal do Aluno</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family:"Segoe UI",Arial,sans-serif;
 }
 
-body{
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
     background:#f5f5f5;
-    overflow-x:hidden;
 }
+
+/* TELA PRINCIPAL */
+
+#homePage{
+    width:100%;
+    height:100%;
+}
+
+/* TOPO */
 
 .topbar{
-    height:80px;
-    background:#ffffff;
+    height:70px;
+    background:#f8f8f8;
     display:flex;
     align-items:center;
     justify-content:space-between;
     padding:0 15px;
+    border-bottom:1px solid #ddd;
 }
 
-.logo-top{
-    color:#0f8ea6;
-    font-size:28px;
-    font-weight:bold;
+.top-left{
+    color:#0b95a8;
+    font-size:20px;
 }
 
-.user{
-    width:45px;
-    height:45px;
+.user-icon{
+    width:40px;
+    height:40px;
     border-radius:50%;
-    background:#6b6b6b;
+    background:#666;
 }
 
-.header{
-    background:#5a005f;
-    height:85px;
+/* HEADER TOTVS */
+
+.totvs-header{
+    height:75px;
+    background:#5A0068;
     display:flex;
     align-items:center;
-    padding-left:20px;
+    padding-left:15px;
 }
 
-.header img{
-    height:50px;
+.totvs-header img{
+    height:42px;
 }
 
-.container{
+/* LAYOUT */
+
+.layout{
     display:flex;
+    height:calc(100vh - 145px);
 }
+
+/* MENU LATERAL */
 
 .sidebar{
-    width:90px;
-    background:#5a005f;
-    min-height:calc(100vh - 165px);
+    width:72px;
+    background:#5A0068;
 }
 
 .menu-item{
-    height:90px;
-    border-bottom:1px solid rgba(255,255,255,.2);
+    height:74px;
+    border-bottom:1px solid rgba(255,255,255,.15);
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     color:white;
-    font-size:34px;
+    font-size:30px;
 }
 
 .menu-item.active{
-    background:#008ea3;
+    background:#008C9F;
 }
+
+/* CONTEUDO */
 
 .content{
     flex:1;
+    overflow-y:auto;
     padding:20px;
 }
 
-.title{
-    font-size:56px;
+.page-title{
+    font-size:42px;
     color:#666;
     font-weight:300;
-    margin-bottom:25px;
-}
-
-.select{
-    width:100%;
-    height:55px;
-    border:1px solid #d6d6d6;
-    background:white;
-    padding:0 15px;
-    font-size:22px;
-    color:#666;
     margin-bottom:20px;
 }
 
-.card{
-    background:#fff;
-    border:1px solid #e2e2e2;
-    padding:20px;
+.field-label{
+    color:#666;
+    font-size:18px;
+    margin-bottom:8px;
+}
+
+.select{
+    width:180px;
+    height:55px;
+    border:1px solid #ddd;
+    background:white;
+    padding:0 15px;
+    font-size:18px;
+    color:#666;
     margin-bottom:25px;
 }
 
-.card-title{
-    color:#008ea3;
-    font-size:22px;
-    line-height:1.4;
-    font-weight:bold;
+/* CARDS */
+
+.report-card{
+    background:white;
+    border:1px solid #ececec;
+    padding:20px;
+    margin-bottom:20px;
 }
 
-.tipo{
+.report-title{
+    color:#00879A;
+    font-size:20px;
+    line-height:1.5;
+    font-weight:500;
+}
+
+.report-type{
     margin-top:15px;
     color:#777;
-    font-size:18px;
+    font-size:16px;
 }
 
-.btn{
+.report-btn{
     width:100%;
+    height:55px;
     border:none;
-    background:#0097a7;
+    background:#0097A7;
     color:white;
-    font-size:22px;
-    padding:18px;
+    font-size:18px;
     margin-top:20px;
-    border-radius:3px;
     cursor:pointer;
 }
 
-.btn:hover{
-    background:#008899;
+.report-btn:hover{
+    background:#008A99;
 }
+
+.report-btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+/* PDF */
 
 #pdfPage{
     display:none;
-    height:100vh;
-    background:#fff;
+    width:100%;
+    height:100%;
+    background:white;
 }
 
 .pdf-header{
     height:70px;
-    background:#5a005f;
+    background:#5A0068;
     display:flex;
     align-items:center;
-    padding:15px;
+    padding:0 15px;
     color:white;
 }
 
 .back-btn{
+    background:#0097A7;
     border:none;
-    background:#0097a7;
     color:white;
     padding:10px 15px;
     border-radius:4px;
     margin-right:15px;
 }
 
-iframe{
+#pdfViewer{
     width:100%;
     height:calc(100vh - 70px);
     border:none;
 }
+
 </style>
 </head>
+
 <body>
+
+<!-- PAGINA RELATORIOS -->
 
 <div id="homePage">
 
     <div class="topbar">
-        <div class="logo-top">E...</div>
-        <div class="user"></div>
+        <div class="top-left">E...</div>
+        <div class="user-icon"></div>
     </div>
 
-    <div class="header">
+    <div class="totvs-header">
         <img src="assets/totvs.png" alt="TOTVS">
     </div>
 
-    <div class="container">
+    <div class="layout">
 
         <div class="sidebar">
+
             <div class="menu-item">☰</div>
             <div class="menu-item">🖥</div>
             <div class="menu-item">📅</div>
@@ -191,63 +233,65 @@ iframe{
             <div class="menu-item">💲</div>
             <div class="menu-item">🤝</div>
             <div class="menu-item active">📄</div>
+
         </div>
 
         <div class="content">
 
-            <div class="title">Relatórios:</div>
+            <h1 class="page-title">Relatórios:</h1>
 
-            <select class="select">
-                <option>2026</option>
-            </select>
+            <div class="field-label">Tipos de relatórios:</div>
 
             <select class="select">
                 <option>TODOS</option>
             </select>
 
-            <div class="card">
-                <div class="card-title">
+            <div class="report-card">
+
+                <div class="report-title">
                     SESI_REL_0002 - Declaração de Matrícula - SESI
                 </div>
 
-                <button class="btn" disabled>
+                <button class="report-btn" disabled>
                     Emitir relatório
                 </button>
 
-                <div class="tipo">
-                    Tipo de relatório: SECRETARIA
-                </div>
-            </div>
-
-            <div class="card">
-
-                <div class="card-title">
-                    SESI_REL_0008 - Boletim Escolar Fundamental Menor,
-                    Maior e Ensino Médio EBEP
-                </div>
-
-                <button class="btn" onclick="abrirPDF()">
-                    Emitir relatório
-                </button>
-
-                <div class="tipo">
+                <div class="report-type">
                     Tipo de relatório: SECRETARIA
                 </div>
 
             </div>
 
-            <div class="card">
-                <div class="card-title">
-                    SESI_REL_0016.1 - Declaração de Imposto de Renda
+            <div class="report-card">
+
+                <div class="report-title">
+                    SESI_REL_0008 - Boletim Escolar Fundamental Menor, Maior e Ensino Médio EBEP
                 </div>
 
-                <button class="btn" disabled>
+                <button class="report-btn" onclick="abrirPDF()">
                     Emitir relatório
                 </button>
 
-                <div class="tipo">
+                <div class="report-type">
                     Tipo de relatório: SECRETARIA
                 </div>
+
+            </div>
+
+            <div class="report-card">
+
+                <div class="report-title">
+                    SESI_REL_0016.1 - Declaração de Imposto de Renda - PortalAluno
+                </div>
+
+                <button class="report-btn" disabled>
+                    Emitir relatório
+                </button>
+
+                <div class="report-type">
+                    Tipo de relatório: SECRETARIA
+                </div>
+
             </div>
 
         </div>
@@ -256,17 +300,24 @@ iframe{
 
 </div>
 
+<!-- VISUALIZADOR PDF -->
+
 <div id="pdfPage">
 
     <div class="pdf-header">
+
         <button class="back-btn" onclick="voltar()">
             ← Voltar
         </button>
 
         <h3>Boletim Escolar</h3>
+
     </div>
 
-    <iframe src="assets/boletim.pdf"></iframe>
+    <iframe
+        id="pdfViewer"
+        src="assets/boletim.pdf">
+    </iframe>
 
 </div>
 
